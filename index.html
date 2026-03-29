@@ -16,38 +16,72 @@
     --mono:'DM Mono',monospace; --sans:'DM Sans',sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6;min-height:100vh;padding:2rem;}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.6;min-height:100vh;padding:1.25rem;}
 
-  /* HEADER */
-  .header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:1.5rem;}
+  /* ── HEADER ─────────────────────────────────────────────── */
+  .header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:1.5rem;padding-bottom:1.25rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:1.25rem;}
   .header-left h1{font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
-  .header-left h2{font-size:28px;font-weight:600;letter-spacing:-.02em;}
-  .inputs-row{display:flex;gap:1.5rem;align-items:flex-end;flex-wrap:wrap;}
-  .input-group{display:flex;flex-direction:column;gap:5px;}
+  .header-left h2{font-size:24px;font-weight:600;letter-spacing:-.02em;}
+
+  .inputs-row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;width:100%;}
+  .input-group{display:flex;flex-direction:column;gap:5px;flex:1;min-width:140px;}
   .input-group label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
-  .nok-input{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--accent);font-family:var(--mono);font-size:20px;font-weight:500;padding:7px 12px;width:210px;text-align:right;outline:none;transition:border-color .15s;letter-spacing:-.01em;}
+  .nok-input{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--accent);font-family:var(--mono);font-size:18px;font-weight:500;padding:10px 12px;width:100%;text-align:right;outline:none;transition:border-color .15s;letter-spacing:-.01em;-webkit-appearance:none;}
   .nok-input:focus{border-color:var(--accent);}
   .input-sub{font-size:11px;color:var(--dim);text-align:right;}
 
-  /* GRIDS */
-  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
-  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1rem;}
-  .grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;margin-bottom:1.5rem;}
-  @media(max-width:900px){.grid-6{grid-template-columns:repeat(3,1fr);}}
-  @media(max-width:600px){.grid-2{grid-template-columns:1fr;}.grid-6{grid-template-columns:repeat(2,1fr);}.grid-3{grid-template-columns:1fr 1fr;}body{padding:1rem;}.nok-input{width:170px;font-size:17px;}#inputReturn{width:80px !important;}}
+  /* ── GRIDS ──────────────────────────────────────────────── */
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:1.25rem;}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:.75rem;}
+  /* Region stat cards: 3 across on mobile, 6 on desktop */
+  .grid-6{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.25rem;}
 
-  /* CARDS */
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.25rem 1.5rem;}
+  @media(min-width:900px){
+    body{padding:2rem;}
+    .header-left h2{font-size:28px;}
+    .inputs-row{width:auto;flex-wrap:nowrap;}
+    .input-group{min-width:unset;flex:unset;}
+    .nok-input{font-size:20px;}
+    .grid-6{grid-template-columns:repeat(6,1fr);}
+    #inputReturn{width:100px !important;}
+  }
+
+  @media(max-width:600px){
+    .grid-2{grid-template-columns:1fr;}
+    .grid-3{grid-template-columns:1fr 1fr;}
+    .inputs-row{gap:.75rem;}
+    .input-group{min-width:calc(50% - .375rem);}
+    /* Return input takes full row */
+    .input-group.input-return{min-width:100%;}
+    .input-group.input-return .nok-input{text-align:left;}
+  }
+
+  /* ── CARDS ──────────────────────────────────────────────── */
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.25rem;}
   .card-title{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem;}
-  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem 1.25rem;}
-  .stat-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-  .stat-value{font-family:var(--mono);font-size:18px;font-weight:500;color:var(--text);letter-spacing:-.02em;}
-  .stat-sub{font-size:11px;color:var(--dim);margin-top:4px;}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;}
+  .stat-label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+  .stat-value{font-family:var(--mono);font-size:16px;font-weight:500;color:var(--text);letter-spacing:-.02em;}
+  .stat-sub{font-size:11px;color:var(--dim);margin-top:3px;}
   .stat-diff{font-family:var(--mono);font-size:11px;margin-top:3px;}
 
-  /* FUND TABLE */
-  .fund-table{width:100%;border-collapse:collapse;}
-  .fund-table th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:0 0 10px 0;text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1;}
+  @media(min-width:900px){
+    .stat-value{font-size:18px;}
+    .card{padding:1.25rem 1.5rem;}
+    .stat-card{padding:1rem 1.25rem;}
+  }
+
+  /* ── TOP COST CARD ──────────────────────────────────────── */
+  .cost-summary-card{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+  .cost-summary-card > div:last-child{text-align:left;}
+  @media(min-width:500px){
+    .cost-summary-card > div:last-child{text-align:right;}
+  }
+
+  /* ── FUND TABLE ─────────────────────────────────────────── */
+  .fund-table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -1.25rem;padding:0 1.25rem;}
+  .fund-table{width:100%;border-collapse:collapse;min-width:460px;}
+  .fund-table th{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);padding:0 0 10px 0;text-align:left;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface);z-index:1;white-space:nowrap;}
   .fund-table th:not(:first-child){text-align:right;}
   .fund-table td{padding:10px 0;border-bottom:1px solid var(--border);vertical-align:middle;}
   .fund-table tr:last-child td{border-bottom:none;}
@@ -57,53 +91,88 @@
   .w-bar-outer{height:3px;background:var(--border2);border-radius:2px;margin-top:5px;}
   .w-bar-inner{height:3px;border-radius:2px;transition:width .3s;}
 
-  /* WEIGHT INPUT */
-  .weight-input{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--accent);font-family:var(--mono);font-size:13px;font-weight:500;width:48px;text-align:right;outline:none;padding:2px 0;transition:border-color .15s;}
+  /* ── WEIGHT INPUT ───────────────────────────────────────── */
+  .weight-input{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--accent);font-family:var(--mono);font-size:13px;font-weight:500;width:48px;text-align:right;outline:none;padding:2px 0;transition:border-color .15s;-webkit-appearance:none;}
   .weight-input:focus{border-bottom-color:var(--accent);}
   .weight-pct{font-family:var(--mono);font-size:13px;color:var(--accent);}
   .total-warn{font-family:var(--mono);font-size:11px;color:var(--red);margin-left:8px;display:none;}
 
-  /* REGION TABLE */
-  .region-row{display:grid;grid-template-columns:130px 1fr 60px 60px 80px 90px;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+  /* ── REGION TABLE ───────────────────────────────────────── */
+  /* Desktop: 6-column grid. Mobile: stacked rows */
+  .region-row{padding:10px 0;border-bottom:1px solid var(--border);}
   .region-row:last-child{border-bottom:none;}
-  .region-row.hdr{padding-bottom:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+  .region-row-inner{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px;margin-bottom:6px;}
+  .region-row-meta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
   .region-name{font-size:13px;font-weight:500;}
-  .region-num{font-family:var(--mono);font-size:13px;text-align:right;}
-  .region-diff{font-family:var(--mono);font-size:12px;text-align:right;}
-  .pill{display:inline-block;padding:2px 8px;border-radius:3px;font-family:var(--mono);font-size:10px;text-align:center;}
+  .region-num{font-family:var(--mono);font-size:13px;}
+  .region-diff{font-family:var(--mono);font-size:12px;}
+  .region-bar-wrap{height:4px;width:100%;position:relative;background:var(--border2);border-radius:2px;margin-bottom:6px;}
+  .pill{display:inline-block;padding:2px 8px;border-radius:3px;font-family:var(--mono);font-size:10px;}
   .pill-over{background:rgba(240,160,96,.15);color:var(--over);}
   .pill-under{background:rgba(96,200,240,.15);color:var(--under);}
   .pill-neutral{background:rgba(136,136,136,.12);color:var(--neutral);}
 
-  /* DONUT */
+  /* Desktop region table: revert to original grid layout */
+  @media(min-width:700px){
+    .region-row{display:grid;grid-template-columns:130px 1fr 60px 60px 80px 90px;align-items:center;gap:12px;padding:10px 0;}
+    .region-row-inner{display:contents;}
+    .region-row-meta{display:contents;}
+    .region-bar-wrap{margin-bottom:0;}
+    .region-row .region-num{text-align:right;}
+    .region-row .region-diff{text-align:right;}
+    .region-row.hdr{display:grid;padding-bottom:8px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);}
+    .region-hdr-bar,.region-hdr-pill{display:block;}
+  }
+  .region-row.hdr{display:none;} /* hide desktop header on mobile */
+  @media(min-width:700px){.region-row.hdr{display:grid;}}
+
+  /* ── DONUT ───────────────────────────────────────────────── */
   .donut-legend{margin-top:1rem;display:flex;flex-direction:column;gap:6px;}
   .dleg{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted);}
   .dleg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
   .dleg-val{margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--text);}
 
-  /* COST BOX */
-  .cost-box{background:rgba(200,240,96,.06);border:1px solid rgba(200,240,96,.15);border-radius:8px;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;margin-top:.75rem;}
+  /* ── COST BOX ────────────────────────────────────────────── */
+  .cost-box{background:rgba(200,240,96,.06);border:1px solid rgba(200,240,96,.15);border-radius:8px;padding:.9rem 1.25rem;display:flex;justify-content:space-between;align-items:center;gap:.75rem;margin-top:.75rem;flex-wrap:wrap;}
   .cost-box .lbl{font-size:13px;color:var(--muted);}
-  .cost-box .val{font-family:var(--mono);font-size:18px;color:var(--accent);font-weight:500;}
+  .cost-box .val{font-family:var(--mono);font-size:16px;color:var(--accent);font-weight:500;}
+  @media(min-width:500px){.cost-box .val{font-size:18px;}}
 
-  .footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;}
+  .footer{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;}
 
-  /* ACTION BUTTONS */
-  .action-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--accent);font-family:var(--mono);font-size:11px;padding:8px 16px;cursor:pointer;letter-spacing:.05em;transition:border-color .15s,background .15s;}
+  /* ── ACTION BUTTONS ─────────────────────────────────────── */
+  .action-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--accent);font-family:var(--mono);font-size:11px;padding:10px 16px;cursor:pointer;letter-spacing:.05em;transition:border-color .15s,background .15s;-webkit-tap-highlight-color:transparent;}
   .action-btn:hover{border-color:var(--accent);background:rgba(200,240,96,.08);}
+  .action-btn:active{background:rgba(200,240,96,.15);}
 
-  /* COST COMP */
-  .cc-row{display:grid;grid-template-columns:1fr 80px 80px 90px;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);}
+  /* ── COST COMPARISON ─────────────────────────────────────── */
+  .cc-row{display:grid;grid-template-columns:1fr 70px 70px 80px;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);}
   .cc-row:last-child{border-bottom:none;}
   .cc-row.cc-hdr{padding-bottom:6px;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);position:sticky;top:0;background:var(--surface);z-index:1;}
-  .cc-input{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:13px;width:58px;text-align:right;outline:none;padding:2px 0;transition:border-color .15s;}
+  .cc-input{background:transparent;border:none;border-bottom:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:13px;width:52px;text-align:right;outline:none;padding:2px 0;transition:border-color .15s;-webkit-appearance:none;}
   .cc-input:focus{border-bottom-color:var(--accent);}
 
-  /* Scrollbar */
-  ::-webkit-scrollbar{width:5px;}
+  @media(max-width:480px){
+    /* Simplify cost comp on very small screens: hide actual TER col */
+    .cc-row{grid-template-columns:1fr 70px 75px;}
+    .cc-actual{display:none;}
+    .cc-row.cc-hdr .cc-actual{display:none;}
+  }
+
+  /* ── EXPORT AREA ─────────────────────────────────────────── */
+  .export-actions{display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-start;}
+  #importArea{width:100%;height:60px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:11px;padding:8px;resize:vertical;outline:none;}
+
+  /* ── SCROLLBAR ───────────────────────────────────────────── */
+  ::-webkit-scrollbar{width:5px;height:5px;}
   ::-webkit-scrollbar-track{background:transparent;}
   ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
   ::-webkit-scrollbar-thumb:hover{background:var(--dim);}
+
+  /* Prevent zoom on input focus on iOS */
+  @media(max-width:768px){
+    input[type="text"],input[type="number"],textarea{font-size:16px !important;}
+  }
 </style>
 </head>
 <body>
@@ -117,31 +186,31 @@
   <div class="inputs-row">
     <div class="input-group">
       <label>Total portfolio value (NOK)</label>
-      <input class="nok-input" id="inputTotal" value="100000" oninput="update()">
+      <input class="nok-input" id="inputTotal" type="text" inputmode="decimal" value="100000" oninput="update()">
       <div class="input-sub" id="subTotal">6 funds</div>
     </div>
     <div class="input-group">
       <label>Monthly savings (NOK)</label>
-      <input class="nok-input" id="inputMonthly" value="1000" oninput="update()">
+      <input class="nok-input" id="inputMonthly" type="text" inputmode="decimal" value="1000" oninput="update()">
       <div class="input-sub" id="subMonthly"></div>
     </div>
-    <div class="input-group">
+    <div class="input-group input-return">
       <label>Projected return (%)</label>
-      <input class="nok-input" id="inputReturn" value="7" oninput="update()" style="width:100px;">
+      <input class="nok-input" id="inputReturn" type="text" inputmode="decimal" value="7" oninput="update()">
       <div class="input-sub">Annual, nominal</div>
     </div>
   </div>
 </div>
 
 <!-- TOP STAT CARDS: costs -->
-<div class="grid-2" style="margin-bottom:1.5rem;">
-  <div class="stat-card" style="display:flex;justify-content:space-between;align-items:center;">
+<div class="grid-2" style="margin-bottom:1.25rem;">
+  <div class="stat-card cost-summary-card">
     <div>
       <div class="stat-label">Annual cost</div>
       <div class="stat-value" id="statCostAnn">—</div>
       <div class="stat-sub" id="statTer">— blended TER</div>
     </div>
-    <div style="text-align:right;">
+    <div>
       <div class="stat-label">Monthly cost</div>
       <div class="stat-value" id="statCostMo">—</div>
       <div class="stat-sub">On current value</div>
@@ -164,11 +233,11 @@
       Fund holdings
       <span class="total-warn" id="totalWarn">⚠ weights ≠ 100%</span>
     </div>
-    <div style="overflow-y:auto;flex:1;min-height:0;">
-    <table class="fund-table">
-      <thead><tr><th>Fund</th><th>Weight</th><th>Cost</th><th>Value (NOK)</th><th>Monthly</th></tr></thead>
-      <tbody id="fundBody"></tbody>
-    </table>
+    <div class="fund-table-scroll" style="overflow-y:auto;flex:1;min-height:0;">
+      <table class="fund-table">
+        <thead><tr><th>Fund</th><th>Weight</th><th>Cost</th><th>Value (NOK)</th><th>Monthly</th></tr></thead>
+        <tbody id="fundBody"></tbody>
+      </table>
     </div>
     <div class="cost-box">
       <div><div class="lbl">Estimated annual cost</div><div style="font-size:11px;color:var(--dim);margin-top:2px;" id="costBoxSub">—</div></div>
@@ -177,14 +246,15 @@
   </div>
   <div class="card">
     <div class="card-title">Allocation by fund</div>
-    <div style="position:relative;height:220px;"><canvas id="donutChart"></canvas></div>
+    <div style="position:relative;height:200px;"><canvas id="donutChart"></canvas></div>
     <div class="donut-legend" id="donutLegend"></div>
   </div>
 </div>
 
 <!-- REGIONAL DIVERSITY TABLE -->
-<div class="card" style="margin-bottom:1.5rem;">
+<div class="card" style="margin-bottom:1.25rem;">
   <div class="card-title">Regional diversity vs ACWI IMI benchmark</div>
+  <!-- Desktop header (hidden on mobile via CSS) -->
   <div class="region-row hdr">
     <div>Region</div><div>Portfolio vs benchmark</div>
     <div style="text-align:right;">Portfolio</div><div style="text-align:right;">ACWI</div>
@@ -194,58 +264,56 @@
 </div>
 
 <!-- REGION CHART + PROJECTIONS side by side -->
-<div class="grid-2" style="margin-bottom:1.5rem;">
+<div class="grid-2" style="margin-bottom:1.25rem;">
   <div class="card">
     <div class="card-title">Regional allocation vs ACWI IMI</div>
-    <div style="position:relative;height:260px;"><canvas id="regionChart"></canvas></div>
+    <div style="position:relative;height:240px;"><canvas id="regionChart"></canvas></div>
   </div>
   <div class="card">
-    <div class="card-title" id="projTitle">Growth projections (7% annual return assumed)</div>
+    <div class="card-title" id="projTitle">Growth projections (7% annual return)</div>
     <div class="grid-3" id="projCards"></div>
     <div style="margin-top:.75rem;margin-bottom:.5rem;">
       <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.05em;">
-        <input type="checkbox" id="showFees" onchange="update()" style="accent-color:var(--accent);cursor:pointer;">
+        <input type="checkbox" id="showFees" onchange="update()" style="accent-color:var(--accent);cursor:pointer;width:16px;height:16px;">
         Show impact of fees
       </label>
     </div>
-    <div style="position:relative;height:200px;"><canvas id="projChart"></canvas></div>
+    <div style="position:relative;height:180px;"><canvas id="projChart"></canvas></div>
     <div id="feeDrag" style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:.5rem;display:none;"></div>
-    <div style="font-size:11px;color:var(--dim);margin-top:.25rem;">Illustrative only. Includes monthly savings. Not financial advice.</div>
+    <div style="font-size:11px;color:var(--dim);margin-top:.25rem;">Illustrative only. Not financial advice.</div>
   </div>
 </div>
 
 <!-- COST COMPARISON -->
-<div class="card" style="margin-bottom:1.5rem;">
+<div class="card" style="margin-bottom:1.25rem;">
   <div class="card-title">Cost impact simulator</div>
-  <div style="font-size:12px;color:var(--muted);margin-bottom:1rem;">Adjust fund TERs below to compare against your current allocation. See how cost changes compound over time.</div>
-  <div style="max-height:320px;overflow-y:auto;" id="costCompBody"></div>
-  <div style="margin-top:1rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap;">
-    <button onclick="resetCostComp()" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-family:var(--mono);font-size:11px;padding:6px 14px;cursor:pointer;letter-spacing:.05em;">Reset to actual</button>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:1rem;">Adjust fund TERs to compare costs. See how changes compound over time.</div>
+  <div style="max-height:320px;overflow-y:auto;overflow-x:auto;-webkit-overflow-scrolling:touch;" id="costCompBody"></div>
+  <div style="margin-top:1rem;display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+    <button onclick="resetCostComp()" style="background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--muted);font-family:var(--mono);font-size:11px;padding:10px 14px;cursor:pointer;letter-spacing:.05em;">Reset to actual</button>
     <span style="font-family:var(--mono);font-size:12px;color:var(--dim);" id="costCompSummary"></span>
   </div>
   <div class="grid-3" id="costCompCards" style="margin-top:1rem;"></div>
 </div>
 
 <!-- EXPORT / IMPORT -->
-<div class="card" style="margin-bottom:1.5rem;">
+<div class="card" style="margin-bottom:1.25rem;">
   <div class="card-title">Export / Import configuration</div>
-  <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-start;">
+  <div class="export-actions">
     <button onclick="exportToUrl()" class="action-btn" id="btnExport">Copy shareable link</button>
     <button onclick="exportToClipboard()" class="action-btn">Copy as text</button>
     <div style="flex:1;min-width:200px;">
-      <textarea id="importArea" placeholder="Paste a shared link or config text here…" style="width:100%;height:60px;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:11px;padding:8px;resize:vertical;outline:none;"></textarea>
+      <textarea id="importArea" placeholder="Paste a shared link or config text here…"></textarea>
       <button onclick="importConfig()" class="action-btn" style="margin-top:4px;">Import</button>
     </div>
   </div>
   <div id="exportMsg" style="font-family:var(--mono);font-size:11px;color:var(--accent);margin-top:8px;display:none;"></div>
 </div>
 
-<div class="footer">Data as of March 2026 · Regional weights calculated from fund factsheets · ACWI IMI benchmark as of Dec 31, 2025 · Fund costs from official factsheets</div>
+<div class="footer">Data as of March 2026 · Regional weights from fund factsheets · ACWI IMI benchmark Dec 31, 2025</div>
 
 <script>
 // ─── FUND DATA ───────────────────────────────────────────────────────────────
-// Regional exposures for each fund (must sum to ~100 within each fund)
-// Regions: US, EU_EX_NO, EM, APAC, NO, OTHER
 const FUND_REGIONS = {
   global:   { US:69.68, EU_EX_NO:14.22, EM:0,     APAC:8.06,  NO:0,    OTHER:8.04 },
   em:       { US:0,     EU_EX_NO:0,     EM:98.79, APAC:1.21,  NO:0,    OTHER:0    },
@@ -264,7 +332,6 @@ const REGION_LABELS = {
 };
 const REGION_ORDER = ['US','EU_EX_NO','EM','APAC','NO','OTHER'];
 
-// Mutable fund weights (start at defaults)
 const FUNDS = [
   { id:'global', name:'KLP AksjeGlobal Indeks N',         short:'KLP Global',       weight:55, cost:0.25, color:'#c8f060' },
   { id:'em',     name:'KLP AksjeFremvoksende Markeder',   short:'KLP Fremvoksende', weight:15, cost:0.33, color:'#1D9E75' },
@@ -272,8 +339,8 @@ const FUNDS = [
   { id:'sb',     name:'SpareBank 1 Norge Verdi N',         short:'SpareBank Norge',  weight:10, cost:1.04, color:'#f0a060' },
   { id:'europa', name:'DNB Europa Indeks A',               short:'DNB Europa',       weight:5,  cost:0.25, color:'#D85A30' },
   { id:'asia',   name:'KLP AksjeAsia Indeks N',            short:'KLP Asia',         weight:5,  cost:0.25, color:'#888'    },
-  { id:'norden', name:'DNB Norden Indeks A',                 short:'DNB Norden',       weight:0,  cost:0.25, color:'#4ECDC4' },
-  { id:'norge',  name:'DNB Norge Indeks A',                  short:'DNB Norge',        weight:0,  cost:0.25, color:'#E8A87C' },
+  { id:'norden', name:'DNB Norden Indeks A',               short:'DNB Norden',       weight:0,  cost:0.25, color:'#4ECDC4' },
+  { id:'norge',  name:'DNB Norge Indeks A',                short:'DNB Norge',        weight:0,  cost:0.25, color:'#E8A87C' },
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
@@ -291,7 +358,7 @@ function calcRegions(){
   const totalW = FUNDS.reduce((s,f)=>s+f.weight,0);
   if(totalW===0) return reg;
   FUNDS.forEach(f => {
-    const w = f.weight / totalW; // normalise so always sums to 100
+    const w = f.weight / totalW;
     const fr = FUND_REGIONS[f.id];
     REGION_ORDER.forEach(r => { reg[r] += w * (fr[r]||0); });
   });
@@ -324,7 +391,7 @@ function initRegionChart(){
     ]},
     options:{ responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:true,labels:{color:'#888',font:{size:11},boxWidth:10,boxHeight:10}}, tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+ctx.parsed.y.toFixed(1)+'%'}} },
-      scales:{ x:{grid:{display:false},ticks:{color:'#666',font:{size:11}}}, y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#666',font:{size:11},callback:v=>v+'%'},max:70} }
+      scales:{ x:{grid:{display:false},ticks:{color:'#666',font:{size:10},maxRotation:0}}, y:{grid:{color:'rgba(255,255,255,0.05)'},ticks:{color:'#666',font:{size:10},callback:v=>v+'%'},max:70} }
     }
   });
 }
@@ -341,12 +408,12 @@ function initProjChart(labels, vals, netVals){
     data:{ labels, datasets },
     options:{ responsive:true, maintainAspectRatio:false,
       plugins:{ legend:{display:!!netVals,labels:{color:'#888',font:{size:11},boxWidth:10,boxHeight:10}}, tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)+' NOK'}} },
-      scales:{ x:{grid:{display:false},ticks:{color:'#666',font:{size:11},maxTicksLimit:5}}, y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#666',font:{size:11},callback:v=>fmtM(v)}} }
+      scales:{ x:{grid:{display:false},ticks:{color:'#666',font:{size:10},maxTicksLimit:5}}, y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#666',font:{size:10},callback:v=>fmtM(v)}} }
     }
   });
 }
 
-// ─── BUILD FUND TABLE (once on init — contains the inputs) ───────────────────
+// ─── BUILD FUND TABLE ────────────────────────────────────────────────────────
 function initFundTable(){
   const rows = FUNDS.map((f,i) => `<tr id="frow_${i}">
     <td>
@@ -355,7 +422,7 @@ function initFundTable(){
     </td>
     <td style="min-width:90px;">
       <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px;">
-        <input class="weight-input" id="w_${i}" type="text" value="${f.weight}" oninput="onWeightChange(${i},this.value)">
+        <input class="weight-input" id="w_${i}" type="text" inputmode="decimal" value="${f.weight}" oninput="onWeightChange(${i},this.value)">
         <span class="weight-pct">%</span>
       </div>
       <div class="w-bar-outer"><div class="w-bar-inner" id="wbar_${i}" style="width:${Math.min(f.weight,100)}%;background:${f.color};"></div></div>
@@ -364,7 +431,6 @@ function initFundTable(){
     <td id="fval_${i}">—</td>
     <td id="fmo_${i}" style="color:var(--accent);">—</td>
   </tr>`).join('');
-  // total row (static structure, dynamic content patched separately)
   const totalRow = `<tr id="frow_total" style="border-top:1px solid var(--border2);">
     <td style="padding-top:11px;"><div class="fund-name" style="color:var(--muted);">Total</div></td>
     <td style="padding-top:11px;text-align:right;font-family:var(--mono);font-size:13px;" id="ftotal_w">—</td>
@@ -375,7 +441,6 @@ function initFundTable(){
   document.getElementById('fundBody').innerHTML = rows + totalRow;
 }
 
-// ─── UPDATE FUND TABLE (patches only non-input cells) ────────────────────────
 function updateFundTable(total, monthly){
   const totalW = FUNDS.reduce((s,f)=>s+f.weight,0);
   document.getElementById('totalWarn').style.display = Math.abs(totalW-100)>0.5 ? 'inline' : 'none';
@@ -401,14 +466,13 @@ function updateFundTable(total, monthly){
   document.getElementById('ftotal_mo').textContent = fmt(monthly);
 }
 
-// ─── WEIGHT CHANGE HANDLER ───────────────────────────────────────────────────
 function onWeightChange(i, val){
   const v = parseFloat(val);
   FUNDS[i].weight = isNaN(v)||v<0 ? 0 : Math.min(v, 100);
   update();
 }
 
-// ─── BUILD REGION STAT CARDS ─────────────────────────────────────────────────
+// ─── REGION STAT CARDS ───────────────────────────────────────────────────────
 const REGION_COLORS = { US:'var(--under)', EU_EX_NO:'var(--accent)', EM:'var(--over)', APAC:'#1D9E75', NO:'#f0a060', OTHER:'var(--muted)' };
 
 function buildRegionStatCards(reg){
@@ -418,41 +482,64 @@ function buildRegionStatCards(reg){
     const a = ACWI[r];
     const d = p - a;
     const col = diffColor(d);
-    const sign = d>=0?'+':'';
+    const s = d>=0?'+':'';
     return `<div class="stat-card">
       <div class="stat-label">${REGION_LABELS[r]}</div>
       <div class="stat-value" style="color:${REGION_COLORS[r]};">${fmtPct(p)}</div>
-      <div class="stat-diff" style="color:${col};">${sign}${d.toFixed(1)}pp vs ACWI</div>
+      <div class="stat-diff" style="color:${col};">${s}${d.toFixed(1)}pp vs ACWI</div>
     </div>`;
   }).join('');
 }
 
-// ─── BUILD REGION TABLE ───────────────────────────────────────────────────────
+// ─── REGION TABLE (responsive) ────────────────────────────────────────────────
 function buildRegionTable(reg){
   const body = document.getElementById('regionTableBody');
+  const isDesktop = window.matchMedia('(min-width:700px)').matches;
+
   body.innerHTML = REGION_ORDER.map(r => {
     const p = reg[r];
     const a = ACWI[r];
     const d = p - a;
     const col = diffColor(d);
     const signStr = d>=0?'+':'';
-    const pct = Math.min(p, 70); // scale bar max 70%
+    const pct = Math.min(p, 70);
     const apct = Math.min(a, 70);
     let pillCls, pillTxt;
     if(d>1.5){ pillCls='pill-over'; pillTxt='Overweight'; }
     else if(d<-1.5){ pillCls='pill-under'; pillTxt='Underweight'; }
     else { pillCls='pill-neutral'; pillTxt='Neutral'; }
-    return `<div class="region-row">
-      <div class="region-name">${REGION_LABELS[r]}</div>
-      <div><div style="height:4px;width:100%;position:relative;background:var(--border2);border-radius:2px;">
-        <div style="position:absolute;top:0;left:0;height:4px;width:${apct/70*100}%;background:rgba(136,136,136,0.25);border-radius:2px;"></div>
-        <div style="position:absolute;top:0;left:0;height:4px;width:${pct/70*100}%;background:${col};border-radius:2px;transition:width .3s;"></div>
-      </div></div>
-      <div class="region-num">${fmtPct(p)}</div>
-      <div class="region-num" style="color:var(--dim);">${fmtPct(a)}</div>
-      <div class="region-diff" style="color:${col};">${signStr}${Math.abs(d).toFixed(1)}pp</div>
-      <div style="text-align:center;"><span class="pill ${pillCls}">${pillTxt}</span></div>
-    </div>`;
+
+    if(isDesktop){
+      // Desktop: original 6-column grid via display:grid on the row
+      return `<div class="region-row" style="display:grid;grid-template-columns:130px 1fr 60px 60px 80px 90px;align-items:center;gap:12px;">
+        <div class="region-name">${REGION_LABELS[r]}</div>
+        <div><div style="height:4px;width:100%;position:relative;background:var(--border2);border-radius:2px;">
+          <div style="position:absolute;top:0;left:0;height:4px;width:${apct/70*100}%;background:rgba(136,136,136,0.25);border-radius:2px;"></div>
+          <div style="position:absolute;top:0;left:0;height:4px;width:${pct/70*100}%;background:${col};border-radius:2px;transition:width .3s;"></div>
+        </div></div>
+        <div class="region-num" style="text-align:right;">${fmtPct(p)}</div>
+        <div class="region-num" style="text-align:right;color:var(--dim);">${fmtPct(a)}</div>
+        <div class="region-diff" style="text-align:right;color:${col};">${signStr}${Math.abs(d).toFixed(1)}pp</div>
+        <div style="text-align:center;"><span class="pill ${pillCls}">${pillTxt}</span></div>
+      </div>`;
+    } else {
+      // Mobile: stacked layout
+      return `<div class="region-row">
+        <div class="region-row-inner">
+          <div class="region-name">${REGION_LABELS[r]}</div>
+          <span class="pill ${pillCls}">${pillTxt}</span>
+        </div>
+        <div class="region-bar-wrap">
+          <div style="position:absolute;top:0;left:0;height:4px;width:${apct/70*100}%;background:rgba(136,136,136,0.25);border-radius:2px;"></div>
+          <div style="position:absolute;top:0;left:0;height:4px;width:${pct/70*100}%;background:${col};border-radius:2px;transition:width .3s;"></div>
+        </div>
+        <div class="region-row-meta">
+          <span class="region-num" style="color:${REGION_COLORS[r]};">${fmtPct(p)}</span>
+          <span style="font-family:var(--mono);font-size:11px;color:var(--dim);">ACWI ${fmtPct(a)}</span>
+          <span class="region-diff" style="color:${col};">${signStr}${Math.abs(d).toFixed(1)}pp</span>
+        </div>
+      </div>`;
+    }
   }).join('');
 }
 
@@ -483,21 +570,17 @@ function update(){
   document.getElementById('costBoxSub').textContent   = (ter*100).toFixed(3)+'% blended TER on total portfolio';
 
   const reg = calcRegions();
-
   buildRegionStatCards(reg);
   updateFundTable(total, monthly);
   updateDonutLegend();
   buildRegionTable(reg);
 
-  // update donut
   donutChart.data.datasets[0].data = FUNDS.map(f=>f.weight);
   donutChart.update('none');
 
-  // update region chart
   regionChart.data.datasets[0].data = REGION_ORDER.map(r=>reg[r]);
   regionChart.update('none');
 
-  // projections
   const rPct = n(document.getElementById('inputReturn').value);
   const r = (isNaN(rPct)||rPct===0) ? 0 : rPct/100;
   const showFees = document.getElementById('showFees').checked;
@@ -508,7 +591,7 @@ function update(){
     return total * Math.pow(1+rate,y) + monthly*12*((Math.pow(1+rate,y)-1)/rate);
   };
 
-  document.getElementById('projTitle').textContent = 'Growth projections ('+rPct+'% annual return assumed)';
+  document.getElementById('projTitle').textContent = 'Growth projections ('+rPct+'% return)';
   document.getElementById('projCards').innerHTML = [5,10,20].map(y => {
     const gross = fv(r,y);
     const net = fv(rNet,y);
@@ -524,11 +607,10 @@ function update(){
     netVals.push(Math.round(fv(rNet,y)));
   }
 
-  // Fee drag summary
   const dragEl = document.getElementById('feeDrag');
   if(showFees){
     const drag20 = vals[20] - netVals[20];
-    dragEl.innerHTML = 'Total fee drag over 20 years: <span style="color:var(--red);">−'+fmt(drag20)+' NOK</span> (blended TER '+(ter*100).toFixed(3)+'%)';
+    dragEl.innerHTML = 'Fee drag over 20 yrs: <span style="color:var(--red);">−'+fmt(drag20)+' NOK</span>';
     dragEl.style.display = 'block';
   } else {
     dragEl.style.display = 'none';
@@ -553,22 +635,24 @@ function update(){
     projChart.update('none');
   }
 
-  // cost comparison
   updateCostComp();
-
-  // update active fund count
   document.getElementById('subTotal').textContent = activeFunds+' funds';
 }
 
 // ─── COST COMPARISON ────────────────────────────────────────────────────────
-let altCosts = FUNDS.map(f => f.cost); // start same as actual
+let altCosts = FUNDS.map(f => f.cost);
 
 function buildCostComp(){
-  const hdr = `<div class="cc-row cc-hdr"><div>Fund</div><div style="text-align:right;">Actual TER</div><div style="text-align:right;">Alt TER</div><div style="text-align:right;">Saving/yr</div></div>`;
-  const rows = FUNDS.map((f,i) => `<div class="cc-row">
+  const hdr = `<div class="cc-row cc-hdr" style="min-width:360px;">
+    <div>Fund</div>
+    <div class="cc-actual" style="text-align:right;">Actual</div>
+    <div style="text-align:right;">Alt TER</div>
+    <div style="text-align:right;">Saving/yr</div>
+  </div>`;
+  const rows = FUNDS.map((f,i) => `<div class="cc-row" style="min-width:360px;">
     <div style="font-size:13px;">${f.short}</div>
-    <div style="text-align:right;font-family:var(--mono);font-size:13px;color:var(--dim);">${f.cost.toFixed(2)}%</div>
-    <div style="text-align:right;"><input class="cc-input" id="cc_${i}" type="text" value="${altCosts[i].toFixed(2)}" oninput="onAltCostChange(${i},this.value)">%</div>
+    <div class="cc-actual" style="text-align:right;font-family:var(--mono);font-size:13px;color:var(--dim);">${f.cost.toFixed(2)}%</div>
+    <div style="text-align:right;"><input class="cc-input" id="cc_${i}" type="text" inputmode="decimal" value="${altCosts[i].toFixed(2)}" oninput="onAltCostChange(${i},this.value)">%</div>
     <div style="text-align:right;font-family:var(--mono);font-size:12px;" id="cc_save_${i}">—</div>
   </div>`).join('');
   document.getElementById('costCompBody').innerHTML = hdr + rows;
@@ -618,7 +702,6 @@ function updateCostComp(){
     summaryEl.style.color = 'var(--dim)';
   }
 
-  // Compound impact over 10 and 20 years
   const actTer = blendedTer();
   const altTerVal = FUNDS.reduce((s,f,i)=>s+(f.weight/totalW)*altCosts[i],0)/100;
   const fvWith = (ter,y) => {
@@ -632,9 +715,8 @@ function updateCostComp(){
     const alt = fvWith(altTerVal, y);
     const diff = alt - curr;
     const col = diff>0?'var(--green)':diff<0?'var(--red)':'var(--dim)';
-    return `<div class="stat-card"><div class="stat-label">${y}yr impact</div><div class="stat-value" style="color:${col};">${diff>=0?'+':''}${fmt(Math.round(diff))}</div><div class="stat-sub">NOK difference after ${y} years</div></div>`;
+    return `<div class="stat-card"><div class="stat-label">${y}yr impact</div><div class="stat-value" style="color:${col};">${diff>=0?'+':''}${fmt(Math.round(diff))}</div><div class="stat-sub">NOK diff after ${y} yrs</div></div>`;
   });
-  // add current vs alt blended TER card
   cards.unshift(`<div class="stat-card"><div class="stat-label">Blended TER</div><div class="stat-value">${(actTer*100).toFixed(3)}% → ${(altTerVal*100).toFixed(3)}%</div><div class="stat-sub">${totalSaveYr>0?'Saving':'Extra'} ${fmt(Math.abs(totalSaveYr))} NOK/yr</div></div>`);
   document.getElementById('costCompCards').innerHTML = cards.join('');
 }
@@ -651,26 +733,19 @@ function getConfig(){
 
 function applyConfig(cfg){
   if(!cfg || typeof cfg !== 'object') return false;
-  // Only accept expected keys — reject anything extra
   const allowed = new Set(['total','monthly','ret','weights']);
   for(const k of Object.keys(cfg)){ if(!allowed.has(k)) return false; }
-
-  // Validate and sanitize each field as a number within sane bounds
   const sNum = (v, min, max) => { const p = parseFloat(v); return (isNaN(p)||p<min||p>max) ? null : p; };
-
   if(cfg.total != null){
-    const v = sNum(cfg.total, 0, 1e12);
-    if(v===null) return false;
+    const v = sNum(cfg.total, 0, 1e12); if(v===null) return false;
     document.getElementById('inputTotal').value = v;
   }
   if(cfg.monthly != null){
-    const v = sNum(cfg.monthly, 0, 1e9);
-    if(v===null) return false;
+    const v = sNum(cfg.monthly, 0, 1e9); if(v===null) return false;
     document.getElementById('inputMonthly').value = v;
   }
   if(cfg.ret != null){
-    const v = sNum(cfg.ret, -50, 100);
-    if(v===null) return false;
+    const v = sNum(cfg.ret, -50, 100); if(v===null) return false;
     document.getElementById('inputReturn').value = v;
   }
   if(cfg.weights != null){
@@ -687,14 +762,9 @@ function applyConfig(cfg){
   return true;
 }
 
-function configToHash(cfg){
-  return btoa(JSON.stringify(cfg));
-}
-
+function configToHash(cfg){ return btoa(JSON.stringify(cfg)); }
 function hashToConfig(hash){
-  // Reject oversized payloads (legit configs are ~100 chars base64)
   if(typeof hash !== 'string' || hash.length > 2000) return null;
-  // Only allow base64 characters
   if(!/^[A-Za-z0-9+/=]+$/.test(hash)) return null;
   try { return JSON.parse(atob(hash)); } catch(e){ return null; }
 }
@@ -722,12 +792,10 @@ function exportToClipboard(){
   const total = n(document.getElementById('inputTotal').value);
   const monthly = n(document.getElementById('inputMonthly').value);
   const totalW = FUNDS.reduce((s,f)=>s+f.weight,0);
-  let txt = 'Portfolio Summary\n';
-  txt += '─────────────────\n';
+  let txt = 'Portfolio Summary\n─────────────────\n';
   txt += 'Total value: '+fmt(total)+' NOK\n';
   txt += 'Monthly savings: '+fmt(monthly)+' NOK\n';
-  txt += 'Blended TER: '+(blendedTer()*100).toFixed(3)+'%\n\n';
-  txt += 'Fund Allocations:\n';
+  txt += 'Blended TER: '+(blendedTer()*100).toFixed(3)+'%\n\nFund Allocations:\n';
   FUNDS.forEach(f => {
     const normW = totalW>0 ? f.weight/totalW : 0;
     const val = Math.round(total * normW);
@@ -745,13 +813,11 @@ function exportToClipboard(){
 function importConfig(){
   const raw = document.getElementById('importArea').value.trim();
   if(!raw){ showExportMsg('Nothing to import'); return; }
-  // Try URL with hash
   const hashIdx = raw.indexOf('#');
   if(hashIdx !== -1){
     const cfg = hashToConfig(raw.substring(hashIdx+1));
     if(cfg && applyConfig(cfg)){ showExportMsg('Configuration imported'); return; }
   }
-  // Try raw base64
   const cfg = hashToConfig(raw);
   if(cfg && applyConfig(cfg)){ showExportMsg('Configuration imported'); return; }
   showExportMsg('Invalid configuration — use a shareable link');
@@ -760,9 +826,19 @@ function importConfig(){
 function loadFromHash(){
   if(window.location.hash && window.location.hash.length > 1){
     const cfg = hashToConfig(window.location.hash.substring(1));
-    if(cfg) applyConfig(cfg); // silently fails if invalid
+    if(cfg) applyConfig(cfg);
   }
 }
+
+// Re-render region table on resize (layout changes between mobile/desktop)
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    const reg = calcRegions();
+    buildRegionTable(reg);
+  }, 150);
+});
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 initDonut();
