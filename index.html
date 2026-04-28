@@ -359,12 +359,15 @@ function initRegionChart(){
   });
 }
 
-function initProjChart(labels, vals){
+function initProjChart(labels, vals, netVals){
   projChart = new Chart(document.getElementById('projChart'),{
     type:'line',
-    data:{ labels, datasets:[{ label:'Portfolio value', data:vals, borderColor:'#c8f060', backgroundColor:'rgba(200,240,96,0.07)', borderWidth:2, pointRadius:0, fill:true, tension:0.3 }] },
+    data:{ labels, datasets:[
+      { label:'Gross value', data:vals, borderColor:'#c8f060', backgroundColor:'rgba(200,240,96,0.07)', borderWidth:2, pointRadius:0, fill:true, tension:0.3 },
+      { label:'Net value (after fees)', data:netVals, borderColor:'#1D9E75', borderWidth:2, pointRadius:0, fill:false, tension:0.3, borderDash:[5,5] }
+    ]},
     options:{ responsive:true, maintainAspectRatio:false,
-      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:ctx=>' '+fmt(ctx.parsed.y)+' NOK'}} },
+      plugins:{ legend:{display:true, labels:{color:'#8a8a8a',font:{size:11},boxWidth:12,boxHeight:2}}, tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+fmt(ctx.parsed.y)+' NOK'}} },
       scales:{ x:{grid:{display:false},ticks:{color:'#8a8a8a',font:{size:11},maxTicksLimit:5}}, y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'#8a8a8a',font:{size:11},callback:v=>fmtM(v)}} }
     }
   });
@@ -529,18 +532,38 @@ function update(){
     if(rEff === 0) return total + monthly*12*y;
     return total * Math.pow(1+rEff,y) + monthly*12*((Math.pow(1+rEff,y)-1)/rEff);
   };
+  
+  // Net projection (accounting for blended TER)
+  const fvNet = y => {
+    const rNet = rEff - ter;
+    if(rNet === 0) return total + monthly*12*y;
+    return total * Math.pow(1+rNet,y) + monthly*12*((Math.pow(1+rNet,y)-1)/rNet);
+  };
+  
   const titleSuffix = real
     ? ` (${rPct}% nominal − ${INFLATION_PCT}% inflation = ${(rPct-INFLATION_PCT).toFixed(1)}% real)`
     : ` (${rPct}% nominal return)`;
   document.getElementById('projTitle').textContent = 'Growth projections' + titleSuffix;
 
+  // Render cards based on Net values to be more realistic, or gross (we'll stick to net)
   document.getElementById('projCards').innerHTML = [5,10,20].map(y =>
-    `<div class="stat-card"><div class="stat-label">${y} years</div><div class="stat-value">${fmtM(fv(y))}</div><div class="stat-sub">${fmt(fv(y))} NOK</div></div>`
+    `<div class="stat-card"><div class="stat-label">${y} years (Net)</div><div class="stat-value">${fmtM(fvNet(y))}</div><div class="stat-sub">${fmt(fvNet(y))} NOK</div></div>`
   ).join('');
-  const labels=[],vals=[];
-  for(let y=0;y<=20;y++){labels.push(y===0?'Now':'Yr '+y);vals.push(Math.round(fv(y)));}
-  if(!projChart){ initProjChart(labels,vals); }
-  else{ projChart.data.labels=labels; projChart.data.datasets[0].data=vals; projChart.update('none'); }
+  
+  const labels=[],vals=[],netVals=[];
+  for(let y=0;y<=20;y++){
+    labels.push(y===0?'Now':'Yr '+y);
+    vals.push(Math.round(fv(y)));
+    netVals.push(Math.round(fvNet(y)));
+  }
+  
+  if(!projChart){ initProjChart(labels,vals,netVals); }
+  else{ 
+    projChart.data.labels=labels; 
+    projChart.data.datasets[0].data=vals; 
+    projChart.data.datasets[1].data=netVals; 
+    projChart.update('none'); 
+  }
 
   updateCostComp();
   updateRebalance(total);
