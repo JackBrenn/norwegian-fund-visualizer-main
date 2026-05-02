@@ -78,7 +78,7 @@
   .pill-under{background:rgba(96,200,240,.15);color:var(--under);}
   .pill-neutral{background:rgba(138,138,138,.15);color:var(--neutral);}
 
-  /* Region bar — portfolio uses a striped overlay so it's distinguishable from benchmark without relying on color alone */
+  /* Region bar */
   .region-bar-bg{position:absolute;top:0;left:0;height:4px;background:rgba(138,138,138,0.28);border-radius:2px;}
   .region-bar-fg{position:absolute;top:0;left:0;height:4px;border-radius:2px;transition:width .3s;background-image:repeating-linear-gradient(135deg, transparent 0 4px, rgba(0,0,0,0.22) 4px 6px);}
 
@@ -119,7 +119,7 @@
     <div class="input-group">
       <label for="inputTotal">Total portfolio value (NOK)</label>
       <input class="nok-input" id="inputTotal" value="100000" oninput="update()" aria-label="Total portfolio value in Norwegian kroner" inputmode="numeric">
-      <div class="input-sub" id="subTotal">6 funds</div>
+      <div class="input-sub" id="subTotal">7 funds</div>
     </div>
     <div class="input-group">
       <label for="inputMonthly">Monthly savings (NOK)</label>
@@ -260,6 +260,7 @@ const FUND_REGIONS = {
   sb:       { US:0,     EU_EX_NO:0,     EM:0,     APAC:0,     NO:100,  OTHER:0    },
   europa:   { US:1.83,  EU_EX_NO:96.89, EM:0,     APAC:0.14,  NO:0.96, OTHER:0.18 },
   asia:     { US:0,     EU_EX_NO:0.75,  EM:0.28,  APAC:98.73, NO:0,    OTHER:0.24 },
+  usa:      { US:100,   EU_EX_NO:0,     EM:0,     APAC:0,     NO:0,    OTHER:0    },
 };
 
 const ACWI = { US:62.7, EU_EX_NO:14.1, EM:11.3, APAC:8.0, NO:0.2, OTHER:3.7 };
@@ -268,11 +269,10 @@ const REGION_LABELS = {
   APAC:'Asia Pacific', NO:'Norway', OTHER:'Canada / Other'
 };
 const REGION_ORDER = ['US','EU_EX_NO','EM','APAC','NO','OTHER'];
-const NEUTRAL_BAND_PP = 1.5;      // ±pp where tilt is considered neutral
-const INFLATION_PCT = 2.5;        // used when "Real" is toggled
-const REGION_BAR_MAX = 70;        // minimum y-axis/bar scale; expanded dynamically
+const NEUTRAL_BAND_PP = 1.5;
+const INFLATION_PCT = 2.5;
+const REGION_BAR_MAX = 70;
 
-// Dev-time sanity check: every fund's regional exposures should sum to ~100
 (function validateFundRegions(){
   Object.entries(FUND_REGIONS).forEach(([id, r]) => {
     const sum = REGION_ORDER.reduce((s,k)=>s+(r[k]||0),0);
@@ -280,7 +280,6 @@ const REGION_BAR_MAX = 70;        // minimum y-axis/bar scale; expanded dynamica
   });
 })();
 
-// Mutable fund weights (start at defaults)
 const FUNDS = [
   { id:'global', name:'KLP AksjeGlobal Indeks N',         short:'KLP Global',       weight:55, cost:0.25, color:'#c8f060' },
   { id:'em',     name:'KLP AksjeFremvoksende Markeder',   short:'KLP Fremvoksende', weight:15, cost:0.33, color:'#1D9E75' },
@@ -288,10 +287,10 @@ const FUNDS = [
   { id:'sb',     name:'SpareBank 1 Norge Verdi N',         short:'SpareBank Norge',  weight:10, cost:1.04, color:'#f0a060' },
   { id:'europa', name:'DNB Europa Indeks A',               short:'DNB Europa',       weight:5,  cost:0.25, color:'#D85A30' },
   { id:'asia',   name:'KLP AksjeAsia Indeks N',            short:'KLP Asia',         weight:5,  cost:0.25, color:'#888'    },
+  { id:'usa',    name:'KLP AksjeUSA Indeks P',             short:'KLP USA',          weight:0,  cost:0.25, color:'#6090f0' },
 ];
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
-// Strict numeric parser: rejects trailing junk ("100abc" -> 0, not 100)
 function n(str){
   const cleaned = String(str).replace(/\s/g,'').replace(/,/g,'.');
   if(!/^-?\d*\.?\d+$/.test(cleaned)) return 0;
@@ -373,7 +372,7 @@ function initProjChart(labels, vals, netVals){
   });
 }
 
-// ─── BUILD FUND TABLE (once on init — contains the inputs) ───────────────────
+// ─── BUILD FUND TABLE ────────────────────────────────────────────────────────
 function initFundTable(){
   const rows = FUNDS.map((f,i) => `<tr id="frow_${i}">
     <td>
@@ -401,7 +400,7 @@ function initFundTable(){
   document.getElementById('fundBody').innerHTML = rows + totalRow;
 }
 
-// ─── UPDATE FUND TABLE (patches only non-input cells) ────────────────────────
+// ─── UPDATE FUND TABLE ────────────────────────────────────────────────────────
 function updateFundTable(total, monthly){
   const totalW = FUNDS.reduce((s,f)=>s+f.weight,0);
   document.getElementById('totalWarn').style.display = Math.abs(totalW-100)>0.5 ? 'inline' : 'none';
@@ -435,7 +434,6 @@ function onWeightChange(i, val){
   else if(v>100)      clamped = 100;
   else                clamped = v;
   FUNDS[i].weight = clamped;
-  // Sync DOM if we clamped, so the user sees the actual applied value
   if(clamped !== v){
     const el = document.getElementById('w_'+i);
     if(el && document.activeElement !== el) el.value = clamped;
@@ -463,7 +461,6 @@ function buildRegionStatCards(reg){
 // ─── BUILD REGION TABLE ───────────────────────────────────────────────────────
 function buildRegionTable(reg){
   const body = document.getElementById('regionTableBody');
-  // Dynamic bar scale: expand if any value exceeds the default
   const maxVal = Math.max(REGION_BAR_MAX, ...REGION_ORDER.map(r=>Math.max(reg[r], ACWI[r])));
   body.innerHTML = REGION_ORDER.map(r => {
     const p = reg[r], a = ACWI[r], d = p - a;
@@ -521,42 +518,38 @@ function update(){
   donutChart.data.datasets[0].data = FUNDS.map(f=>f.weight);
   donutChart.update('none');
 
-  // Region chart: expand y-axis if needed so bars never clip
   regionChart.data.datasets[0].data = REGION_ORDER.map(r=>reg[r]);
   const peak = Math.max(...REGION_ORDER.map(r=>Math.max(reg[r], ACWI[r])));
   regionChart.options.scales.y.max = Math.max(REGION_BAR_MAX, Math.ceil(peak/10)*10);
   regionChart.update('none');
 
-  // projections (use effective return; can be negative under "real")
   const fv = y => {
     if(rEff === 0) return total + monthly*12*y;
     return total * Math.pow(1+rEff,y) + monthly*12*((Math.pow(1+rEff,y)-1)/rEff);
   };
-  
-  // Net projection (accounting for blended TER)
+
   const fvNet = y => {
     const rNet = rEff - ter;
     if(rNet === 0) return total + monthly*12*y;
     return total * Math.pow(1+rNet,y) + monthly*12*((Math.pow(1+rNet,y)-1)/rNet);
   };
-  
+
   const titleSuffix = real
     ? ` (${rPct}% nominal − ${INFLATION_PCT}% inflation = ${(rPct-INFLATION_PCT).toFixed(1)}% real)`
     : ` (${rPct}% nominal return)`;
   document.getElementById('projTitle').textContent = 'Growth projections' + titleSuffix;
 
-  // Render 20-year summary table cards: Gross, Net, and Total Fees
   const targetYear = 20;
   const grossVal = fv(targetYear);
   const netVal = fvNet(targetYear);
   const totalFees = grossVal - netVal;
-  
+
   document.getElementById('projCards').innerHTML = `
     <div class="stat-card"><div class="stat-label">${targetYear}yr Gross Value</div><div class="stat-value">${fmtM(grossVal)}</div><div class="stat-sub">${fmt(Math.round(grossVal))} NOK</div></div>
     <div class="stat-card"><div class="stat-label">${targetYear}yr Net (After Fees)</div><div class="stat-value" style="color:var(--accent);">${fmtM(netVal)}</div><div class="stat-sub">${fmt(Math.round(netVal))} NOK</div></div>
     <div class="stat-card"><div class="stat-label">${targetYear}yr Total Fees</div><div class="stat-value" style="color:var(--red);">${fmtM(totalFees)}</div><div class="stat-sub">${fmt(Math.round(totalFees))} NOK lost to fees</div></div>
   `;
-  
+
   const labels=[],vals=[],netVals=[];
   for(let y=0;y<=20;y++){
     labels.push(y===0?'Now':'Yr '+y);
@@ -564,7 +557,6 @@ function update(){
     netVals.push(Math.round(fvNet(y)));
   }
 
-  // Render/Update the projection chart
   if (!projChart) {
     initProjChart(labels, vals, netVals);
   } else {
@@ -580,7 +572,6 @@ function update(){
 }
 
 // ─── REBALANCE HELPER ───────────────────────────────────────────────────────
-// Stores current actual NOK values per fund. Initialised to target values on first load.
 let actualValues = null;
 
 function initRebalance(){
@@ -615,7 +606,6 @@ function resetRebalance(){
 
 function updateRebalance(totalFromInput, fromUser){
   if(!actualValues){
-    // Seed from input on first run
     const totalW = FUNDS.reduce((s,f)=>s+f.weight,0);
     actualValues = FUNDS.map(f => totalW>0 ? totalFromInput * f.weight/totalW : 0);
     FUNDS.forEach((f,i) => {
@@ -624,7 +614,6 @@ function updateRebalance(totalFromInput, fromUser){
     });
   }
   const actualTotal = actualValues.reduce((s,x)=>s+x, 0);
-  // Base rebalance target on actualTotal (keeps money where it is, just rebalances)
   const totalW = FUNDS.reduce((s,f)=>s+f.weight,0);
   let maxAbsDelta = 0;
   FUNDS.forEach((f,i) => {
@@ -663,7 +652,6 @@ function updateRebalance(totalFromInput, fromUser){
 }
 
 // ─── COST COMPARISON ────────────────────────────────────────────────────────
-// Seed with 0.20% flat alternative so the feature demonstrates itself on first load
 let altCosts = FUNDS.map(() => 0.20);
 
 function buildCostComp(){
@@ -756,8 +744,6 @@ function getConfig(){
   };
 }
 
-// Validate config first; only apply to DOM/state if every field passes. Prevents
-// partial state from a half-valid payload (e.g. good total, bad weights).
 function applyConfig(cfg){
   if(!cfg || typeof cfg !== 'object') return false;
   const allowed = new Set(['total','monthly','ret','real','weights']);
@@ -765,7 +751,6 @@ function applyConfig(cfg){
 
   const sNum = (v, min, max) => { const p = parseFloat(v); return (isNaN(p)||p<min||p>max) ? null : p; };
 
-  // ── Validation phase: collect validated values, bail on any failure ──
   const validated = {};
   if(cfg.total != null){
     const v = sNum(cfg.total, 0, 1e12); if(v===null) return false;
@@ -790,7 +775,6 @@ function applyConfig(cfg){
     validated.weights = parsed;
   }
 
-  // ── Apply phase: all validation passed ──
   if('total' in validated)   document.getElementById('inputTotal').value = validated.total;
   if('monthly' in validated) document.getElementById('inputMonthly').value = validated.monthly;
   if('ret' in validated)     document.getElementById('inputReturn').value = validated.ret;
@@ -802,7 +786,6 @@ function applyConfig(cfg){
       if(el) el.value = w;
     });
   }
-  // After import, the rebalance helper's actualValues no longer matches — reset it
   actualValues = null;
   update();
   return true;
